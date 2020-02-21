@@ -1,0 +1,28 @@
+
+#include <stdio.h>
+#include <math.h>
+
+using namespace std;
+
+int main()
+{
+  int i, n, z, sup, inf, average, xi;
+  int a [n];
+  scanf("%d\n", &n);
+    for (i=1; i<= n-1; i++)
+    {
+        scanf("%d\n", &z);
+        a[i]= z;
+    }
+    sup= a[1];
+        for (i=2; i<=n-1; i++)
+       {
+        if (a[i]>a[i-1])
+        sup=a[i];
+        }
+    
+    
+  
+    
+    
+}
