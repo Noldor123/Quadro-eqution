@@ -1,0 +1,64 @@
+#include  <stdio.h>
+#include  <math.h>
+
+int main()
+{
+     int a,b,c,d;
+     int s;
+     float result1,result2,Im1,Im2,Re;
+     printf ("Enter yours parametrical a");
+     scanf ("%d",&a);
+     if (a == 0)
+     {
+         printf ("Hi, dude, it is linear equation");
+         printf ("Enter yours parametrical b");
+         scanf ("%d",&b);
+         printf ("Enter yours parametrical c");
+         scanf ("%d",&c);
+         printf ("Enter yours parametrical d");
+         scanf ("%d",&d);
+         if (b == 0)
+         {
+            printf ("Hi, dude, it isn't equation");
+         }
+         else
+         {
+             result1=(float)(d-c)/b;
+             printf ("Hi, dude\n");
+             printf ("your result = %f",result1);
+         }
+     }
+     else
+     {
+         printf ("Enter yours parametrical b");
+         scanf ("%d",&b);
+         printf ("Enter yours parametrical c");
+         scanf ("%d",&c);
+         printf ("Enter yours parametrical d");
+         scanf ("%d",&d);
+         if ((b*b-4*a*(c-d))>=0)
+         {
+                result1= (sqrt(b*b-4*a*(c-d))-b)/(2*a);
+                result2= (-sqrt(b*b-4*a*(c-d))-b)/(2*a);
+                printf ("Hi, dude\n");
+                printf ("your result = %f",result1);
+                printf ("your result = %f",result2);
+             
+         }
+         else
+         {
+            s= b*b-4*a*(c-d);
+            Im1=sqrt(abs(s))/(2*a);
+            Im2=-sqrt(abs(s))/(2*a);
+            Re=-b/(2*a);
+             printf ("Hi, dude\n");
+             printf ("Imaginary part = %f\n" ,Im1);
+             printf ("Real part = %f\n",Re);
+             printf ("Imaginary part = %f\n" ,Im2);
+             printf ("Real part = %f\n",Re);
+             
+         }
+     }
+     return 0;
+}
+
