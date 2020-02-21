@@ -1,0 +1,26 @@
+#include <stdio.h>
+#include <math.h>
+
+using namespace std;
+
+int main()
+{
+    unsigned int N;
+    unsigned int i, d, l;
+    scanf("%d", &N);
+    for (d=2; d<=N; d++)
+    {
+        l=0;
+        for (i=2; i<= d-1; i++ )
+            {
+                if(d%i==0)
+                l++;  
+                
+          
+            }   
+        if (l==0)
+        printf ("%d\n", d);
+    
+    }
+    
+}
