@@ -1,1 +1,28 @@
+#include <stdio.h> 
+#include <stdlib.h> 
+#include <math.h> 
 
+
+int main() 
+{ 
+long int a=-4; 
+int n; 
+scanf("%d",&n); 
+long int i=3; 
+double pi=4; 
+double b=(double)a/i; 
+double y=1; 
+for(int i=0;i<n;i++){ 
+y=y/10; 
+} 
+
+while(fabs(b)>y){ 
+pi=pi+b; 
+i+=2; 
+a=-a; 
+b=(double)a/i; 
+} 
+
+
+printf("%.*f\n", n,pi); 
+}
