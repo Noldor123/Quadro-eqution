@@ -8,12 +8,12 @@ int main()
     unsigned int i=3; 
     double pi=4; 
     double b=(double)a/i; 
-    double accurancy=1; 
+    double accuracy=1; 
     for(int i=0;i<n;i++)
     { 
-        accurancy=accurancy/10; 
+        accuracy=accuracy/10; 
     } 
-    while(abs(b)>accurancy)
+    while(abs(b)>accuracy)
     { 
         pi=pi+b; 
         i+=2; 
