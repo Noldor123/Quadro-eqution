@@ -1,0 +1,25 @@
+
+#include <iostream>
+#include <stdio.h>
+#include <math.h>
+
+double func(double x)
+{
+return (x-sin(x)-0.25);
+}
+int main()
+{
+    float a,b,x0,S,Sum;
+    int i,N;
+    scanf ("%f",&a);
+    scanf ("%f",&b);
+    scanf ("%i", &N);
+    x0=(b-a)/N;
+    Sum=0;
+    for (i=0;i<=N-1;i++)
+    {
+    S=((func(a+x0+i*x0)+func(a+i*x0))/2)*x0;
+    Sum=Sum+S;
+    }
+    printf ("%f",Sum);
+}
