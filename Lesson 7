@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <math.h>
+#include <stdlib.h>
+
+int max(int* a, int lenght) {
+	int m = a[0];
+	for (int i = 0; i < lenght; i++) {
+		if (a[i] > m) {
+			m = a[i];
+		}
+	}
+	return m;
+}
+
+int min(int* a, int lenght) {
+	int m = a[0];
+	for (int i = 0; i < lenght; i++) {
+		if (a[i] < m) {
+			m = a[i];
+		}
+	}
+	return m;
+}
+
+float average(int a[], int lenght) {
+	int m = 0;
+	for (int i = 0; i < lenght; i++) {
+		m += a[i];
+	}
+	return ((float)m / lenght);
+}
+
+float stand_d(int a[], int lenght) {
+	float m = 0;
+	float aver = average(a, lenght);
+	for (int i = 0; i < lenght; i++) {
+		m += ((float)a[i] - aver) * ((float)a[i] - aver);
+	}
+	return sqrtf(m / (lenght - 1));
+}
+
+int main() {
+	int N;
+	scanf("%d", &N);
+	int *a;
+	a = (int*)malloc(N * sizeof(int));
+	for (int i = 0; i < N; i++) {
+		scanf("%d", &a[i]);
+	}
+	printf("max = %d\n", max(a, N));
+	printf("min = %d\n", min(a, N));
+	printf("average = %f\n", average(a, N));
+	printf("stand_d = %f\n", stand_d(a, N));
+	free(a);
+	return 0;
+}
