@@ -1,0 +1,113 @@
+#include <stdio.h>
+#include <math.h>
+#include <malloc.h>
+#include <stdlib.h>
+typedef struct Matrix {float a[3][3];} Matrix;
+void readMatrix(Matrix* m, FILE* file){
+    for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                fscanf(file, "%f", &m->a[i][j]);
+            }
+    }
+}
+void printMatrix(Matrix m){
+    for (int i = 0; i < 3; i++){
+        for (int j = 0; j < 3; j++){
+            printf(" %f ", m.a[i][j]);
+        }
+        printf(" \n");
+    }
+}
+
+int determinant(Matrix a){
+    int s = a.a[0][0]*a.a[1][1]*a.a[2][2] + a.a[0][1]*a.a[1][2]*a.a[2][0] + a.a[0][2]*a.a[1][0]*a.a[2][1] - a.a[0][0]*a.a[1][2]*a.a[2][1] - a.a[1][1]*a.a[0][2]*a.a[2][0] - a.a[2][2]*a.a[0][1]*a.a[1][0];
+    return s;
+}
+Matrix inversion(Matrix a){
+    Matrix s;
+    s.a[0][0] = (float)(a.a[1][1] * a.a[2][2] - a.a[2][1] * a.a[1][2]) / (float)determinant(a);
+    s.a[0][1] = (float)(a.a[2][1] * a.a[0][2] - a.a[0][1] * a.a[2][2]) / (float)determinant(a);
+    s.a[0][2] = (float)(a.a[0][1] * a.a[1][2] - a.a[1][1] * a.a[0][2]) / (float)determinant(a);
+    s.a[1][0] = (float)(a.a[2][0] * a.a[1][2] - a.a[1][0] * a.a[2][2]) / (float)determinant(a);
+    s.a[1][1] = (float)(a.a[0][0] * a.a[2][2] - a.a[0][2] * a.a[2][0]) / (float)determinant(a);
+    s.a[1][2] = (float)(a.a[1][0] * a.a[0][2] - a.a[0][0] * a.a[1][2]) / (float)determinant(a);
+    s.a[2][0] = (float)(a.a[1][0] * a.a[2][1] - a.a[2][0] * a.a[1][1]) / (float)determinant(a);
+    s.a[2][1] = (float)(a.a[2][0] * a.a[0][1] - a.a[0][0] * a.a[2][1]) / (float)determinant(a);
+    s.a[2][2] = (float)(a.a[0][0] * a.a[1][1] - a.a[0][1] * a.a[1][0]) / (float)determinant(a);
+    return s;
+}
+Matrix sum(Matrix a,Matrix b){
+    Matrix s;
+    for (int i = 0; i < 3; i++){
+        for ( int j = 0; j < 3; j++){
+            s.a[i][j] = a.a[i][j] + b.a[i][j];
+        }
+    }
+    return s;
+}
+Matrix composition(Matrix a,Matrix b){
+    Matrix c;
+    for (int i = 0; i < 3; i++){
+        for ( int j = 0; j < 3; j++){
+            c.a[i][j] = a.a[i][0] * b.a[0][j] + a.a[i][1] * b.a[1][j] + a.a[i][2] * b.a[2][j];
+        }
+    }
+    return c;
+}
+int main()
+{
+
+    FILE *file;
+    file = fopen("Matrix", "r");
+    int d,q;
+    Matrix m1, m2, s, c, v;
+    printf("take values from the keyboard - 1, take values from file - 2\n");
+    scanf("%d", &q);
+    if (q == 2){
+        readMatrix(&m1, file);
+        readMatrix(&m2, file);
+    }
+    else{
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                printf("a[%d][%d]=", i, j);
+                scanf("%f", &m1.a[i][j]);
+            }
+        }
+        for (int i = 0; i < 3; i++){
+            for (int j = 0; j < 3; j++){
+                printf("b[%d][%d]=", i, j);
+                scanf("%f", &m2.a[i][j]);
+            }
+        }
+    }
+    fclose(file);
+    printf(" sum - 1, composition - 2, determinant - 3, inversion - 4\n");
+    scanf("%d", &q);
+    if (q == 2){
+        c = composition( m1, m2);
+        printf(" composition = \n");
+        printMatrix(c);
+    }
+    if (q == 1){
+        s = sum( m1, m2);
+        printf(" sum = \n");
+        printMatrix(s);
+    }
+    if (q == 3){
+        d = determinant(m1);
+        printf("determinant a = ");
+        printf("%d\n", d);
+        d = determinant(m2);
+        printf("determinant b = ");
+        printf("%d\n", d);
+    }
+    if (q == 4){
+        
+        v = inversion(m1);
+        printf(" inversion matrix a = \n");
+        printMatrix(v);
+    }
+    
+    
+}
