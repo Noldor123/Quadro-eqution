@@ -1,0 +1,128 @@
+#include<stdlib.h> 
+
+#include<stdio.h> 
+
+  
+
+void merge_down(int arr[], int l, int m, int r) 
+
+{ 
+int i, j, k; 
+int n1 = m - l + 1; 
+int n2 =  r - m; 
+int L[n1], R[n2]; 
+    for (i = 0; i < n1; i++) 
+        L[i] = arr[l + i]; 
+    for (j = 0; j < n2; j++) 
+        R[j] = arr[m + 1+ j]; 
+        i = 0; 
+        j = 0; 
+        k = l;
+    while (i < n1 && j < n2) 
+    { 
+        if (L[i] <= R[j]) 
+        { 
+            arr[k] = L[i]; 
+            i++; 
+        } 
+        else
+        { 
+            arr[k] = R[j]; 
+            j++; 
+        } 
+        k++; 
+    } 
+    while (i < n1) 
+    { 
+        arr[k] = L[i]; 
+        i++; 
+        k++; 
+    } 
+    while (j < n2) 
+    { 
+        arr[k] = R[j]; 
+        j++; 
+        k++; 
+    } 
+} 
+void merge_up(int arr[], int l, int m, int r) 
+
+{ 
+int i, j, k; 
+int n1 = m - l + 1; 
+int n2 =  r - m; 
+int L[n1], R[n2]; 
+    for (i = 0; i < n1; i++) 
+        L[i] = arr[l + i]; 
+    for (j = 0; j < n2; j++) 
+        R[j] = arr[m + 1+ j]; 
+        i = 0; 
+        j = 0; 
+        k = l;
+    while (i < n1 && j < n2) 
+    { 
+        if (R[i] <= L[j]) 
+        { 
+            arr[k] = L[i]; 
+            i++; 
+        } 
+        else
+        { 
+            arr[k] = R[j]; 
+            j++; 
+        } 
+        k++; 
+    } 
+    while (i < n1) 
+    { 
+        arr[k] = L[i]; 
+        i++; 
+        k++; 
+    } 
+    while (j < n2) 
+    { 
+        arr[k] = R[j]; 
+        j++; 
+        k++; 
+    } 
+}
+void mergeSortD(int arr[], int l, int r) 
+{ 
+    if (l < r) 
+    { 
+        int m = l+(r-l)/2; 
+        mergeSortD(arr, l, m); 
+        mergeSortD(arr, m+1, r);
+        merge_down(arr, l, m, r);
+    } 
+} 
+void mergeSortU(int arr[], int l, int r) 
+{ 
+    if (l < r) 
+    { 
+        int m = l+(r-l)/2; 
+        mergeSortU(arr, l, m); 
+        mergeSortU(arr, m+1, r);
+        merge_up(arr, l, m, r);
+    } 
+} 
+int main() 
+{   
+  int N;
+  int check;
+  scanf("%d", &N);
+  printf("enter sort type\n merge_up - 1\n merge_down - 2\n");
+  scanf("%d", &check);
+  int *arr = (int*)malloc(sizeof(int) * N); 
+  for (int i = 0; i < N; i++) 
+    scanf("%d", &arr[i]);
+    if (check==1)
+    mergeSortU(arr, 0, N - 1);
+    if (check==2)
+    mergeSortD(arr, 0, N - 1);
+    for (int i = N-1; i >= 0; i--) 
+    printf("%d ", arr[i]); 
+    free(arr);
+    return 0; 
+
+} 
