@@ -106,7 +106,7 @@ int main()
         
         v = inversion(m1);
         printf(" inversion matrix a = \n");
-        printMatrix(v);
+        printMatrix(composition(v, m1));
     }
     
     
