@@ -1,0 +1,83 @@
+#include <stdio.h> 
+#include <math.h> 
+#include <malloc.h> 
+#include <stdlib.h> 
+#include <string.h>
+#include <ctype.h>
+#define SIZE 256
+void replace_symb(char* string, int number, char name){
+    string[number] = name;
+    //printf("1\n");
+}
+void delete_symb(char* string, int number){
+    int i = number;
+    while ( string[i] != 0){
+        string[i] = string[i + 1];
+        i++;
+    }
+    //printf("2\n");
+}
+void insert_symb(char* string, int number){
+    int i = strlen(string) + 1;
+    while( i > number){
+        string[i] = string[i - 1];
+        i = i - 1; 
+    }
+    string[number] = 32;
+    //printf("3\n");
+}
+char correct_string(char* string){
+    int i = 0;
+    while ( string[i] != 0){
+        if ( string[i] > 65 && string[i] < 90){
+            replace_symb(string, i, string[i] = string[i] + 32);        
+        }
+        i++;
+    }
+    i = 0;
+    while (string[i] != 0){
+        if (string[i] == '!' || string[i] == ',' || string[i] == '-' || string[i] == '.' || string[i] == ':' || string[i] == ';' || string[i] == '?'){
+            insert_symb(string, i + 1);
+        }
+        if ((string[i] == '!' || string[i] == ',' || string[i] == '-' || string[i] == '.' || string[i] == ':' || string[i] == ';' || string[i] == '?') && string[i - 1]==32){
+            delete_symb(string, i - 1);
+            i = i - 1;
+        }
+        if ( string[i] == 32 && string[i + 1] == 32){
+            while(string[i + 1] == 32){
+                delete_symb(string, i + 1);
+            }
+        }
+        i++;
+    }
+    i = 0;
+    while( string[i] != 0){
+        if (( string[i] == '!' || string[i] == '.' || string[i] == '?') && (( string[i + 2] > 65 && string[i + 2] < 90) || ( string[i + 2] > 97 && string[i + 2] < 122))){
+            if ( string[i + 2] != 0){
+                if ( isupper(string[i + 2]) == 0){
+                    replace_symb(string, i + 2, string[i + 2] = string[i + 2] - 32);
+                }
+            }
+        }
+        i++;
+    }
+    if (string[0] > 96 && string[0] < 123){
+        replace_symb(string, 0, string[0] = string[0] - 32);
+    }
+}
+
+int main()
+{
+    int lenght;
+    char string[SIZE];
+    printf("Enter text (Max size is 100 symbols) \n");
+    fgets(string, SIZE, stdin);
+    lenght = strlen(string);
+    if ( lenght > 100){
+        printf("Stop it!The maximum size was exceeded\n");
+        return 0;
+    }
+    correct_string(string);
+    printf("Correct text:\n");
+    puts(string);
+}
