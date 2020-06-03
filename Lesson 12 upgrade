@@ -1,0 +1,230 @@
+#include <stdio.h> 
+#include <math.h> 
+#include <malloc.h> 
+#include <stdlib.h> 
+#define N 50 
+typedef struct Matrix { 
+float** a; 
+int lines, columns; 
+}Matrix; 
+void init_matrix_file(Matrix* m, FILE* file) { 
+
+m->a = (float**)malloc(sizeof(float*)*m->lines); 
+for (int i = 0; i < m->lines; i++) { 
+m->a[i] = (float*)malloc(sizeof(float*)*m->columns); 
+for (int j = 0; j < m->columns; j++) { 
+fscanf(file, "%f", &m->a[i][j]); 
+} 
+} 
+} 
+void init_matrix_random(Matrix* m) { 
+int xmin, xmax; 
+printf(" enter minimal count\n"); 
+scanf("%d", &xmin); 
+printf(" enter maximum count\n"); 
+scanf("%d", &xmax); 
+m->a = (float**)malloc(sizeof(float*)*m->lines); 
+for (int i = 0; i < m->lines; i++) { 
+m->a[i] = (float*)malloc(sizeof(float*)*m->columns); 
+for (int j = 0; j < m->columns; j++) { 
+m->a[i][j] = xmin + rand() % (xmax - xmin + 1); 
+} 
+} 
+} 
+void free_matrix(Matrix* m) { 
+for (int i = 0; i < m->lines; i++) { 
+free(m->a[i]); 
+} 
+free(m->a); 
+} 
+void print_matrix(Matrix m) { 
+printf(" \n"); 
+for (int i = 0; i < m.lines; i++) { 
+for (int j = 0; j < m.columns; j++) { 
+printf(" %f ", m.a[i][j]); 
+} 
+printf(" \n"); 
+} 
+} 
+Matrix sum_matrix(Matrix m1, Matrix m2) { 
+Matrix s; s.lines = m1.lines; s.columns = m1.columns; 
+s.a = (float**)malloc(sizeof(float*)*m1.lines); 
+for (int i = 0; i < m1.lines; i++) { 
+s.a[i] = (float*)malloc(sizeof(float)*m1.columns); 
+for (int j = 0; j < m1.columns; j++) { 
+s.a[i][j] = m1.a[i][j] + m2.a[i][j]; 
+} 
+} 
+return s; 
+} 
+Matrix mult_matrix(Matrix m1, Matrix m2) { 
+Matrix c; c.lines = m1.lines; c.columns = m2.columns; 
+c.a = (float**)malloc(sizeof(float*)*m1.lines); 
+for (int i = 0; i < m1.lines; i++) { 
+c.a[i] = (float*)malloc(sizeof(float)*m2.columns); 
+for (int j = 0; j < m2.columns; j++) { 
+for (int k = 0; k < m2.lines; k++) { 
+c.a[i][j] = c.a[i][j] + m1.a[i][k] * m2.a[k][j]; 
+} 
+} 
+} 
+return c; 
+} 
+int det_matrix(Matrix m) { 
+Matrix m2; m2.lines = m.lines; 
+m2.a = (float**)malloc(sizeof(float*)*m.lines); 
+for (int i = 0; i < m.lines; i++) { 
+m2.a[i] = (float*)malloc(sizeof(float)*m.lines); 
+for (int j = 0; j < m.lines; j++) { 
+m2.a[i][j] = m.a[i][j]; 
+} 
+} 
+int t, d = 1; 
+if (m2.a[0][0] == 0) { 
+for (int i = 0; i < m.lines; i++) { 
+if (m2.a[i][0] != 0) { 
+for (int j = 0; j < m.lines; j++) { 
+t = m2.a[0][j]; 
+m2.a[0][j] = m2.a[i][j]; 
+m2.a[i][j] = t; 
+} 
+} 
+} 
+} 
+for (int i = 0; i < m.lines; i++) { 
+for (int k = i + 1; k < m.lines; k++) { 
+for (int j = i + 1; j < m.lines; j++) { 
+m2.a[k][j] = m2.a[k][j] - m2.a[i][j] * m2.a[k][i] / m2.a[i][i]; 
+} 
+} 
+} 
+for (int i = 0; i < m.lines; i++) { 
+d = d * m2.a[i][i]; 
+} 
+free_matrix(&m2); 
+return d; 
+} 
+Matrix inv_matrix(Matrix m) { 
+Matrix IM, ad; ad.lines = m.lines - 1; ad.columns = m.columns - 1; IM.lines = m.lines; IM.columns = m.columns; 
+ad.a = (float**)malloc(sizeof(float*)*(m.lines - 1)); 
+IM.a = (float**)malloc(sizeof(float*)*m.lines); 
+for (int i = 0; i < m.lines; i++) { 
+IM.a[i] = (float*)malloc(sizeof(float)*m.lines); 
+} 
+for (int i = 0; i < m.lines - 1; i++) { 
+ad.a[i] = (float*)malloc(sizeof(float)*(m.lines - 1)); 
+} 
+int a = 1; 
+for (int i = 0; i < m.lines; i++) { 
+for (int j = 0; j < m.lines; j++) { 
+int p = 0; 
+int q = 0; 
+for (int k = 0; k < m.lines - 1; k++) { 
+for (int n = 0; n < m.lines - 1; n++) { 
+if (p == i) { 
+p = p + 1; 
+} 
+if (q == j) { 
+q = q + 1; 
+} 
+ad.a[k][n] = m.a[p][q]; 
+q++; 
+} 
+q = 0; 
+p++; 
+} 
+IM.a[j][i] = a * det_matrix(ad); 
+a = a * -1; 
+} 
+} 
+free_matrix(&ad); 
+return IM; 
+} 
+
+int main() 
+{ 
+FILE* file; 
+file = fopen("file", "r"); 
+Matrix matrix1, matrix2, matrixResult; 
+int q, d; 
+printf("enter size of matrix1\n enter the count of lines\n N = "); 
+scanf("%d", &matrix1.lines); 
+printf("\n enter the count of columns\n М = "); 
+scanf("%d", &matrix1.columns); 
+printf("take element values from file-2\ngenerate element values with random-1\n"); 
+scanf("%d", &q); 
+if (q == 2) { 
+init_matrix_file(&matrix1, file); 
+} 
+if (q == 1) { 
+init_matrix_random(&matrix1); 
+} 
+printf("enter size of matrix2\n enter the count of lines\n N = "); 
+scanf("%d", &matrix2.lines); 
+printf("\n enter the count of columns\n М = "); 
+scanf("%d", &matrix2.columns); 
+printf("take element values from file-2\ngenerate element values with random-1\n"); 
+scanf("%d", &q); 
+if (q == 2) { 
+init_matrix_file(&matrix2, file); 
+} 
+if (q == 1) { 
+
+init_matrix_random(&matrix2); 
+} 
+printf("sum - 1 mult - 2 det - 3 inv - 4\n"); 
+scanf("%d", &q); 
+printf("matrix1 = \n"); 
+print_matrix(matrix1); 
+printf("matrix2 = \n"); 
+print_matrix(matrix2); 
+if (q == 1) { 
+if ((matrix1.lines == matrix2.lines) && (matrix1.columns == matrix2.columns)) 
+{ 
+matrixResult = sum_matrix(matrix1, matrix2); 
+print_matrix(matrixResult); 
+} 
+else printf("it isn't possible"); 
+} 
+if (q == 2) { 
+if (matrix1.columns == matrix2.lines) { 
+matrixResult = mult_matrix(matrix1, matrix2); 
+print_matrix(matrixResult); 
+} 
+else printf("it isn't possible"); 
+} 
+if (q == 3) { 
+if (matrix1.lines == matrix1.columns) 
+{ 
+d = det_matrix(matrix1); 
+printf("det matrix is\n"); 
+printf("%d\n", d); 
+} 
+else printf("it isn't possible"); 
+if (matrix2.lines == matrix2.columns) 
+{ 
+d = det_matrix(matrix2); 
+printf("det matrix is\n"); 
+printf("%d\n", d); 
+} 
+else printf("it isn't possible"); 
+} 
+if (q == 4) { 
+if ((matrix1.lines == matrix1.columns)&(det_matrix(matrix1) != 0)) 
+{ 
+matrixResult = inv_matrix(matrix1); 
+print_matrix(matrixResult); 
+} 
+else printf("it isn't possible"); 
+if ((matrix2.lines == matrix2.columns)&(det_matrix(matrix2) != 0)) 
+{ 
+matrixResult = inv_matrix(matrix2); 
+print_matrix(matrixResult); 
+} 
+else printf("it isn't possible"); 
+} 
+return 0; 
+fclose(file); 
+free_matrix(&matrix1); 
+free_matrix(&matrix2); 
+}
