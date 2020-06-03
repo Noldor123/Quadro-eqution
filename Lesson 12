@@ -181,7 +181,7 @@ int main()
     scanf("%d", &matrix1.lines);
     printf("\n enter the count of columns\n М = ");
     scanf("%d", &matrix1.columns);
-    printf("take element values from file-2\n generate element values with random\n");
+    printf("take element values from file-2\ngenerate element values with random-1\n");
     scanf("%d", &q);
     if (q == 2){
         init_matrix_file(&matrix1, file);
@@ -193,7 +193,7 @@ int main()
     scanf("%d", &matrix2.lines);
     printf("\n enter the count of columns\n М = ");
     scanf("%d", &matrix2.columns);
-    printf("take element values from\n random - 1   file - 2\n");
+    printf("take element values from file-2\ngenerate element values with random-1\n");
     scanf("%d", &q);
     if (q == 2){
         init_matrix_file(&matrix2, file);
