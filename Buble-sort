@@ -1,0 +1,80 @@
+#include <stdio.h> 
+#include <math.h> 
+#include <stdlib.h>
+#include <iostream>
+
+void replace(int* x, int* y) {
+    int before;
+    before = *x;
+    *x = *y;
+    *y = before;
+}
+
+int compare_incr(int* x, int* y) {
+    return *x - *y;
+}
+
+int compare_decr(int* x, int* y) {
+    return *y - *x;
+}
+
+int compare_incr_abs(int* x, int* y) {
+    return abs(*x) - abs(*y);
+}
+
+int compare_decr_abs(int* x, int* y) {
+    return abs(*y) - abs(*x);
+}
+
+void sort(int* data, int n, int compare(int*, int*)) { //сортировка пузырьками.
+    int i, j;
+    int flag = 0;
+    for (j = 0; j < n; j++) {
+        for (i = 0; i < n - j - 1; i++) {
+            if (compare(data + i, data + i + 1) > 0) {
+                flag = 1;
+                replace(data + i, data + i + 1);
+            }
+        }
+        if (flag == 0) break;
+        flag = 0;
+    }
+}
+
+void option(int* data, int n) {
+    int i, m;
+    printf("Метод сортировки:\n");
+    printf(" 1 - Возрастание.\n");
+    printf(" 2 - Убывание.\n");
+    printf(" 3 - Возрастание(по модулю).\n");
+    printf(" 4 - Убывание(по модулю).\n");
+    scanf("%d", &m);
+    printf("\n");
+
+    if (m == 1) sort(data, n, compare_incr);
+    if (m == 2) sort(data, n, compare_decr);
+    if (m == 3) sort(data, n, compare_incr_abs);
+    if (m == 4) sort(data, n, compare_decr_abs);
+
+    for (i = 0; i < n; i++) {	//вывод.
+        printf("%i ", *(data + i));
+    }
+    printf("\n\n\n");
+}
+
+int main() {
+    int n, i;
+    int* data;
+    printf("Введите количество элементов:\t");
+    scanf("%d", &n);
+    printf("\n");
+    data = (int*)malloc(n * sizeof(int));
+    printf("Заполните массив:\t");
+    for (i = 0; i < n; i++) {	// Ввод элементов массив.
+        scanf("%d", &data[i]);
+    }
+    printf("\n\n");
+    option(data, n);
+    free(data);
+    return 0;
+}
